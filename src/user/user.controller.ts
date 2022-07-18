@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Put,
+  Query,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -22,8 +23,11 @@ export class UserController {
   }
 
   @Get()
-  findAll() {
-    return this.userService.findAll();
+  getAutoSuggestUsers(
+    @Query('loginSubstring') loginSubstring: string,
+    @Query('limit') limit: number,
+  ) {
+    return this.userService.findAll(loginSubstring, limit);
   }
 
   @Get(':id')

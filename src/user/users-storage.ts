@@ -8,6 +8,7 @@ export class UsersDataBase {
 
   create(user: User) {
     this.users.push(user);
+    console.log(user, this.users);
     return user;
   }
 
@@ -19,15 +20,15 @@ export class UsersDataBase {
     return this.users.find((user) => user.id === id);
   }
 
-  update(id: string, newUser: User): User {
+  update(id: string, newUser: UpdateUserDto): User {
     const user = this.users.find((user) => user.id === id);
     Object.assign(user, newUser);
     return user;
   }
 
   delete(id: string) {
-    const length = this.users.length;
-    this.users = this.users.filter((item) => item.id !== id);
-    return length === this.users.length;
+    const user = this.users.find((user) => user.id === id);
+    Object.assign(user, { isDeleted: true });
+    return user;
   }
 }
