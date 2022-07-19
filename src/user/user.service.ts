@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { v4 as uuidv4 } from 'uuid';
@@ -24,7 +24,7 @@ export class UserService {
     const allUsers = this.usersDataBase.findAll();
     const filteredUsers = allUsers
       .filter((user: User) => {
-        return user.login.includes(loginSubstring);
+        return user.login.includes(loginSubstring) && !user.isDeleted;
       })
       .sort(SortArray)
       .slice(0, limit);
@@ -33,14 +33,26 @@ export class UserService {
   }
 
   findOne(id: string) {
-    return this.usersDataBase.findOne(id);
+    const user = this.usersDataBase.findOne(id);
+    if (!user || user.isDeleted) {
+      throw new NotFoundException('Not found');
+    }
+    return user;
   }
 
   update(id: string, updateUserDto: UpdateUserDto) {
+    const user = this.usersDataBase.findOne(id);
+    if (!user || user.isDeleted) {
+      throw new NotFoundException('Not found');
+    }
     return this.usersDataBase.update(id, updateUserDto);
   }
 
   remove(id: string) {
+    const user = this.usersDataBase.findOne(id);
+    if (!user || user.isDeleted) {
+      throw new NotFoundException('Not found');
+    }
     return this.usersDataBase.delete(id);
   }
 }
