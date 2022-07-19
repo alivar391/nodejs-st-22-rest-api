@@ -1,4 +1,11 @@
-import { IsString, IsNotEmpty, IsInt, Matches } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsInt,
+  Matches,
+  Min,
+  Max,
+} from 'class-validator';
 export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
@@ -6,10 +13,18 @@ export class CreateUserDto {
 
   @IsString()
   @IsNotEmpty()
-  @Matches(/^(?=.*?\d)(?=.*?[a-zA-Z])[a-zA-Z\d]+$/)
+  @Matches(/^(?=.*?\d)(?=.*?[a-zA-Z])[a-zA-Z\d]+$/, {
+    message: 'Password should contain letters and numbers',
+  })
   password: string;
 
   @IsInt()
   @IsNotEmpty()
+  @Min(4, {
+    message: 'Person is too young',
+  })
+  @Max(130, {
+    message: 'Person is too old',
+  })
   age: string;
 }

@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { v4 as uuidv4 } from 'uuid';
@@ -11,6 +15,12 @@ export class UserService {
   constructor(private readonly usersDataBase: UsersDataBase) {}
 
   create(createUserDto: CreateUserDto): User {
+    const userExist = this.usersDataBase.findByLogin(createUserDto.login);
+    if (userExist) {
+      throw new BadRequestException(
+        `User with login: ${createUserDto.login} already exist`,
+      );
+    }
     const newUser: User = {
       id: uuidv4(),
       ...createUserDto,
@@ -33,7 +43,7 @@ export class UserService {
   }
 
   findOne(id: string) {
-    const user = this.usersDataBase.findOne(id);
+    const user = this.usersDataBase.findById(id);
     if (!user || user.isDeleted) {
       throw new NotFoundException('Not found');
     }
@@ -41,7 +51,7 @@ export class UserService {
   }
 
   update(id: string, updateUserDto: UpdateUserDto) {
-    const user = this.usersDataBase.findOne(id);
+    const user = this.usersDataBase.findById(id);
     if (!user || user.isDeleted) {
       throw new NotFoundException('Not found');
     }
@@ -49,7 +59,7 @@ export class UserService {
   }
 
   remove(id: string) {
-    const user = this.usersDataBase.findOne(id);
+    const user = this.usersDataBase.findById(id);
     if (!user || user.isDeleted) {
       throw new NotFoundException('Not found');
     }

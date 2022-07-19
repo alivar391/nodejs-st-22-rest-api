@@ -15,8 +15,12 @@ export class UsersDataBase {
     return this.users;
   }
 
-  findOne(id: string) {
+  findById(id: string) {
     return this.users.find((user) => user.id === id);
+  }
+
+  findByLogin(login: string) {
+    return this.users.find((user) => user.login === login);
   }
 
   update(id: string, newUser: UpdateUserDto): User {
