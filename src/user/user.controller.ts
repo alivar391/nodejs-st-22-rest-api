@@ -30,7 +30,7 @@ export class UserController {
     @Query('loginSubstring') loginSubstring: string,
     @Query('limit') limit: number,
   ) {
-    return this.userService.findAll(loginSubstring, limit);
+    return this.userService.findAll(loginSubstring || '', limit || 5);
   }
 
   @Get(':id')
