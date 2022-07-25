@@ -14,7 +14,7 @@ export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
   @Matches(/^(?=.*?\d)(?=.*?[a-zA-Z])[a-zA-Z\d]+$/, {
-    message: 'Password should contain letters and numbers',
+    message: 'Password must contain at least one number and one letter',
   })
   password: string;
 

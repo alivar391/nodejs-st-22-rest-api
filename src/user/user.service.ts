@@ -45,7 +45,7 @@ export class UserService {
   findOne(id: string) {
     const user = this.usersDataBase.findById(id);
     if (!user || user.isDeleted) {
-      throw new NotFoundException('Not found');
+      throw new NotFoundException('User is not found');
     }
     return user;
   }
@@ -53,7 +53,7 @@ export class UserService {
   update(id: string, updateUserDto: UpdateUserDto) {
     const user = this.usersDataBase.findById(id);
     if (!user || user.isDeleted) {
-      throw new NotFoundException('Not found');
+      throw new NotFoundException('User is not found');
     }
     return this.usersDataBase.update(id, updateUserDto);
   }
@@ -61,7 +61,7 @@ export class UserService {
   remove(id: string) {
     const user = this.usersDataBase.findById(id);
     if (!user || user.isDeleted) {
-      throw new NotFoundException('Not found');
+      throw new NotFoundException('User is not found');
     }
     return this.usersDataBase.delete(id);
   }

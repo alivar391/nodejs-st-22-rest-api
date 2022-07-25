@@ -31,7 +31,6 @@ export class UsersDataBase {
 
   delete(id: string) {
     const user = this.users.find((user) => user.id === id);
-    console.log(user);
     Object.assign(user, { isDeleted: true });
     return user;
   }
