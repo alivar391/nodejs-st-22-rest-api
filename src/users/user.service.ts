@@ -23,16 +23,15 @@ export class UserService {
       where: { login: createUserDto.login },
     });
     if (userExist) {
-      throw new BadRequestException(
-        `User with login: ${createUserDto.login} already exist`,
-      );
+      return;
     }
     const newUser = {
       id: uuidv4(),
       ...createUserDto,
       age: +createUserDto.age,
     };
-    return await this.userModel.create(newUser);
+    const res = await this.userModel.create(newUser);
+    return res;
   }
 
   async findAll(loginSubstring: string, limit: number) {
@@ -50,7 +49,7 @@ export class UserService {
   async findOne(id: string) {
     const user = await this.userModel.findByPk(id);
     if (!user || user.isDeleted) {
-      throw new NotFoundException('User is not found');
+      return;
     }
     return user;
   }
@@ -59,6 +58,14 @@ export class UserService {
     const user = await this.userModel.findByPk(id);
     if (!user || user.isDeleted) {
       throw new NotFoundException('User is not found');
+    }
+    const userExist = await this.userModel.findOne({
+      where: { login: updateUserDto.login },
+    });
+    if (userExist) {
+      throw new BadRequestException(
+        `User with login: ${updateUserDto.login} already exist`,
+      );
     }
     const newUser = await this.userModel.update(
       {
@@ -76,7 +83,7 @@ export class UserService {
   async remove(id: string) {
     const user = await this.userModel.findByPk(id);
     if (!user || user.isDeleted) {
-      throw new NotFoundException('User is not found');
+      return;
     }
     return await this.userModel.update({ isDeleted: true }, { where: { id } });
   }

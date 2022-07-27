@@ -13,7 +13,9 @@ export class UpdateUserDto {
 
   @IsString()
   @IsNotEmpty()
-  @Matches(/^(?=.*?\d)(?=.*?[a-zA-Z])[0-9a-zA-Z!@#$%^&*]+$/)
+  @Matches(/^(?=.*?\d)(?=.*?[a-zA-Z])[0-9a-zA-Z!@#$%^&*]+$/, {
+    message: 'Password must contain at least one number and one letter',
+  })
   password: string;
 
   @IsInt()

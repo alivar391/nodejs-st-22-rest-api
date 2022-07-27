@@ -6,7 +6,7 @@ interface UserCreationsAttrs {
   age: number;
 }
 
-@Table({ tableName: 'users' })
+@Table({ tableName: 'Users' })
 export class User extends Model<User, UserCreationsAttrs> {
   @Column({
     type: DataType.STRING,

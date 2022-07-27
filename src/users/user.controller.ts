@@ -9,6 +9,8 @@ import {
   Query,
   HttpCode,
   HttpStatus,
+  BadRequestException,
+  NotFoundException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -20,34 +22,48 @@ export class UserController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  async create(@Body() createUserDto: CreateUserDto) {
+    const user = await this.userService.create(createUserDto);
+    if (!user) {
+      throw new BadRequestException(
+        `User with login: ${createUserDto.login} already exist`,
+      );
+    }
+    return user;
   }
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  getAutoSuggestUsers(
+  async getAutoSuggestUsers(
     @Query('loginSubstring') loginSubstring: string,
     @Query('limit') limit: number,
   ) {
-    return this.userService.findAll(loginSubstring, limit);
+    return await this.userService.findAll(loginSubstring || '', limit || 10);
   }
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    const user = await this.userService.findOne(id);
+    if (!user) {
+      throw new NotFoundException('User is not found');
+    }
+    return user;
   }
 
   @Put(':id')
   @HttpCode(HttpStatus.OK)
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(id, updateUserDto);
+  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    return await this.userService.update(id, updateUserDto);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  remove(@Param('id') id: string) {
-    return this.userService.remove(id);
+  async remove(@Param('id') id: string) {
+    const user = await this.userService.remove(id);
+    if (!user) {
+      throw new NotFoundException('User is not found');
+    }
+    return user;
   }
 }
