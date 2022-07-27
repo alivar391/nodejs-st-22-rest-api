@@ -11,6 +11,8 @@ async function bootstrap() {
     defaultVersion: '1',
   });
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
-  await app.listen(PORT);
+  await app.listen(PORT, () => {
+    console.log(`Server is running on port = ${PORT}`);
+  });
 }
 bootstrap();
