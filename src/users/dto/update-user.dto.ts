@@ -1,4 +1,11 @@
-import { IsString, IsNotEmpty, IsInt, Matches } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsInt,
+  Matches,
+  Min,
+  Max,
+} from 'class-validator';
 export class UpdateUserDto {
   @IsString()
   @IsNotEmpty()
@@ -6,10 +13,16 @@ export class UpdateUserDto {
 
   @IsString()
   @IsNotEmpty()
-  @Matches(/^(?=.*?\d)(?=.*?[a-zA-Z])[a-zA-Z\d]+$/)
+  @Matches(/^(?=.*?\d)(?=.*?[a-zA-Z])[0-9a-zA-Z!@#$%^&*]+$/)
   password: string;
 
   @IsInt()
   @IsNotEmpty()
+  @Min(4, {
+    message: 'Person is too young',
+  })
+  @Max(130, {
+    message: 'Person is too old',
+  })
   age: string;
 }

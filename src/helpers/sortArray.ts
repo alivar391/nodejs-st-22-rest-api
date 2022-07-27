@@ -1,3 +1,4 @@
-import { User } from 'src/users/entities/user.entity';
+import { UserEntity } from 'src/users/entities/user.entity';
 
-export const SortArray = (x: User, y: User) => x.login.localeCompare(y.login);
+export const SortArray = (x: UserEntity, y: UserEntity) =>
+  x.login.localeCompare(y.login);

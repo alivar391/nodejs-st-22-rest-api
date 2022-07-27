@@ -1,8 +1,13 @@
 import { Model, Table, Column, DataType } from 'sequelize-typescript';
-import { CreateUserDto } from './dto/create-user.dto';
+
+interface UserCreationsAttrs {
+  login: string;
+  password: string;
+  age: number;
+}
 
 @Table({ tableName: 'users' })
-export class User extends Model<User, CreateUserDto> {
+export class User extends Model<User, UserCreationsAttrs> {
   @Column({
     type: DataType.STRING,
     unique: true,

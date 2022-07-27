@@ -6,32 +6,37 @@ import {
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { v4 as uuidv4 } from 'uuid';
-import { UsersDataBase } from './users-storage';
-import { User } from './entities/user.entity';
+import { User } from './users.model';
 import { SortArray } from 'src/helpers/sortArray';
+import { InjectModel } from '@nestjs/sequelize';
+import { UserEntity } from './entities/user.entity';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly usersDataBase: UsersDataBase) {}
+  constructor(
+    @InjectModel(User)
+    private userModel: typeof User,
+  ) {}
 
-  create(createUserDto: CreateUserDto): User {
-    const userExist = this.usersDataBase.findByLogin(createUserDto.login);
+  async create(createUserDto: CreateUserDto): Promise<UserEntity> {
+    const userExist = await this.userModel.findOne({
+      where: { login: createUserDto.login },
+    });
     if (userExist) {
       throw new BadRequestException(
         `User with login: ${createUserDto.login} already exist`,
       );
     }
-    const newUser: User = {
+    const newUser = {
       id: uuidv4(),
       ...createUserDto,
       age: +createUserDto.age,
-      isDeleted: false,
     };
-    return this.usersDataBase.create(newUser);
+    return await this.userModel.create(newUser);
   }
 
-  findAll(loginSubstring: string, limit: number) {
-    const allUsers = this.usersDataBase.findAll();
+  async findAll(loginSubstring: string, limit: number) {
+    const allUsers = await this.userModel.findAll();
     const filteredUsers = allUsers
       .filter((user: User) => {
         return user.login.includes(loginSubstring) && !user.isDeleted;
@@ -42,27 +47,37 @@ export class UserService {
     return filteredUsers;
   }
 
-  findOne(id: string) {
-    const user = this.usersDataBase.findById(id);
+  async findOne(id: string) {
+    const user = await this.userModel.findByPk(id);
     if (!user || user.isDeleted) {
       throw new NotFoundException('User is not found');
     }
     return user;
   }
 
-  update(id: string, updateUserDto: UpdateUserDto) {
-    const user = this.usersDataBase.findById(id);
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    const user = await this.userModel.findByPk(id);
     if (!user || user.isDeleted) {
       throw new NotFoundException('User is not found');
     }
-    return this.usersDataBase.update(id, updateUserDto);
+    const newUser = await this.userModel.update(
+      {
+        ...updateUserDto,
+        age: +updateUserDto.age,
+      },
+      {
+        where: { id },
+        returning: true,
+      },
+    );
+    return newUser[1][0];
   }
 
-  remove(id: string) {
-    const user = this.usersDataBase.findById(id);
+  async remove(id: string) {
+    const user = await this.userModel.findByPk(id);
     if (!user || user.isDeleted) {
       throw new NotFoundException('User is not found');
     }
-    return this.usersDataBase.delete(id);
+    return await this.userModel.update({ isDeleted: true }, { where: { id } });
   }
 }
