@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './users.model';
-import { SortArray } from 'src/helpers/sortArray';
 import { InjectModel } from '@nestjs/sequelize';
 import { UserEntity } from './entities/user.entity';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class UserService {
@@ -21,7 +21,6 @@ export class UserService {
       return;
     }
     const newUser = {
-      // id: uuidv4(),
       ...createUserDto,
       age: +createUserDto.age,
     };
@@ -30,15 +29,12 @@ export class UserService {
   }
 
   async findAll(loginSubstring: string, limit: number) {
-    const allUsers = await this.userModel.findAll();
-    const filteredUsers = allUsers
-      .filter((user: User) => {
-        return user.login.includes(loginSubstring) && !user.isDeleted;
-      })
-      .sort(SortArray)
-      .slice(0, limit);
-
-    return filteredUsers;
+    const allUsers = await this.userModel.findAll({
+      where: { login: { [Op.substring]: loginSubstring } },
+      order: [['login', 'ASC']],
+      limit: limit,
+    });
+    return allUsers;
   }
 
   async findOne(id: string) {
