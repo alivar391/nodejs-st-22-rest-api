@@ -11,6 +11,7 @@ import {
   HttpStatus,
   BadRequestException,
   NotFoundException,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -54,7 +55,20 @@ export class UserController {
   @Put(':id')
   @HttpCode(HttpStatus.OK)
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return await this.userService.update(id, updateUserDto);
+    try {
+      const user = await this.userService.update(id, updateUserDto);
+      return user;
+    } catch (err) {
+      if (err.message === '400') {
+        throw new BadRequestException(
+          `User with login: ${updateUserDto.login} already exist`,
+        );
+      } else if (err.message === '404') {
+        throw new NotFoundException('User is not found');
+      } else {
+        throw new InternalServerErrorException();
+      }
+    }
   }
 
   @Delete(':id')

@@ -9,7 +9,8 @@ interface UserCreationsAttrs {
 @Table({ tableName: 'Users' })
 export class User extends Model<User, UserCreationsAttrs> {
   @Column({
-    type: DataType.STRING,
+    type: DataType.UUID,
+    defaultValue: DataType.UUIDV4(),
     unique: true,
     primaryKey: true,
   })

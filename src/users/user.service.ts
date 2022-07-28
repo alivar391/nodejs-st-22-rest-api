@@ -1,11 +1,6 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { v4 as uuidv4 } from 'uuid';
 import { User } from './users.model';
 import { SortArray } from 'src/helpers/sortArray';
 import { InjectModel } from '@nestjs/sequelize';
@@ -26,7 +21,7 @@ export class UserService {
       return;
     }
     const newUser = {
-      id: uuidv4(),
+      // id: uuidv4(),
       ...createUserDto,
       age: +createUserDto.age,
     };
@@ -57,15 +52,13 @@ export class UserService {
   async update(id: string, updateUserDto: UpdateUserDto) {
     const user = await this.userModel.findByPk(id);
     if (!user || user.isDeleted) {
-      throw new NotFoundException('User is not found');
+      throw new Error('404');
     }
     const userExist = await this.userModel.findOne({
       where: { login: updateUserDto.login },
     });
     if (userExist) {
-      throw new BadRequestException(
-        `User with login: ${updateUserDto.login} already exist`,
-      );
+      throw new Error('400');
     }
     const newUser = await this.userModel.update(
       {
