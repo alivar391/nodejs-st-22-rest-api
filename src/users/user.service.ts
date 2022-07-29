@@ -20,11 +20,7 @@ export class UserService {
     if (userExist) {
       return;
     }
-    const newUser = {
-      ...createUserDto,
-      age: +createUserDto.age,
-    };
-    const res = await this.userModel.create(newUser);
+    const res = await this.userModel.create(createUserDto);
     return res;
   }
 
@@ -56,16 +52,10 @@ export class UserService {
     if (userExist) {
       throw new Error('400');
     }
-    const newUser = await this.userModel.update(
-      {
-        ...updateUserDto,
-        age: +updateUserDto.age,
-      },
-      {
-        where: { id },
-        returning: true,
-      },
-    );
+    const newUser = await this.userModel.update(updateUserDto, {
+      where: { id },
+      returning: true,
+    });
     return newUser[1][0];
   }
 

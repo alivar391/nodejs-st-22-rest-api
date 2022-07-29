@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import 'dotenv/config';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
+import 'dotenv/config';
 
 const PORT = process.env.PORT || 3000;
 async function bootstrap() {
@@ -10,7 +10,7 @@ async function bootstrap() {
     type: VersioningType.URI,
     defaultVersion: '1',
   });
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
   await app.listen(PORT, () => {
     console.log(`Server is running on port = ${PORT}`);
   });

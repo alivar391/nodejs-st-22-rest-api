@@ -6,7 +6,7 @@ interface UserCreationsAttrs {
   age: number;
 }
 
-@Table({ tableName: 'Users' })
+@Table({ tableName: 'Users', timestamps: false })
 export class User extends Model<User, UserCreationsAttrs> {
   @Column({
     type: DataType.UUID,

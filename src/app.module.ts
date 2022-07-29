@@ -20,7 +20,6 @@ import { User } from './users/users.model';
       models: [User],
       autoLoadModels: true,
       retryAttempts: 2,
-      // synchronize: false,
     }),
   ],
 })

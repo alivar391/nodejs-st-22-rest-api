@@ -26,5 +26,5 @@ export class CreateUserDto {
   @Max(130, {
     message: 'Person is too old',
   })
-  age: string;
+  age: number;
 }
