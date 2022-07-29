@@ -26,7 +26,7 @@ export class UserService {
 
   async findAll(loginSubstring: string, limit: number) {
     const allUsers = await this.userModel.findAll({
-      where: { login: { [Op.substring]: loginSubstring } },
+      where: { login: { [Op.substring]: loginSubstring }, isDeleted: false },
       order: [['login', 'ASC']],
       limit: limit,
     });
