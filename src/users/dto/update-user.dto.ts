@@ -6,14 +6,14 @@ import {
   Min,
   Max,
 } from 'class-validator';
-export class CreateUserDto {
+export class UpdateUserDto {
   @IsString()
   @IsNotEmpty()
   login: string;
 
   @IsString()
   @IsNotEmpty()
-  @Matches(/^(?=.*?\d)(?=.*?[a-zA-Z])[a-zA-Z\d]+$/, {
+  @Matches(/^(?=.*?\d)(?=.*?[a-zA-Z])[0-9a-zA-Z!@#$%^&*]+$/, {
     message: 'Password must contain at least one number and one letter',
   })
   password: string;
@@ -26,5 +26,5 @@ export class CreateUserDto {
   @Max(130, {
     message: 'Person is too old',
   })
-  age: string;
+  age: number;
 }
