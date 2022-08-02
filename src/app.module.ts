@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { UserModule } from './users/user.module';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { ConfigModule } from '@nestjs/config';
-import { User } from './users/users.model';
+import { User } from './users/models/users.model';
 
 @Module({
   imports: [
