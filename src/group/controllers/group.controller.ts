@@ -8,6 +8,7 @@ import {
   HttpCode,
   HttpStatus,
   Put,
+  NotFoundException,
 } from '@nestjs/common';
 import { GroupService } from '../services/group.service';
 import { CreateGroupDto } from '../dto/create-group.dto';
@@ -19,31 +20,47 @@ export class GroupController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  create(@Body() createGroupDto: CreateGroupDto) {
-    return this.groupService.create(createGroupDto);
+  async create(@Body() createGroupDto: CreateGroupDto) {
+    return await this.groupService.create(createGroupDto);
   }
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  findAll() {
-    return this.groupService.findAll();
+  async findAll() {
+    return await this.groupService.findAll();
   }
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  findOne(@Param('id') id: string) {
-    return this.groupService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    const group = await this.groupService.findOne(id);
+    if (!group) {
+      throw new NotFoundException('Group is not found');
+    }
+    return;
   }
 
   @Put(':id')
   @HttpCode(HttpStatus.OK)
-  update(@Param('id') id: string, @Body() updateGroupDto: UpdateGroupDto) {
-    return this.groupService.update(id, updateGroupDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updateGroupDto: UpdateGroupDto,
+  ) {
+    const group = await this.groupService.update(id, updateGroupDto);
+    if (!group) {
+      console.log('no');
+      throw new NotFoundException('Group is not found');
+    }
+    return group;
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  remove(@Param('id') id: string) {
-    return this.groupService.remove(id);
+  async remove(@Param('id') id: string) {
+    const group = await this.groupService.remove(id);
+    if (!group) {
+      throw new NotFoundException('Group is not found');
+    }
+    return group;
   }
 }

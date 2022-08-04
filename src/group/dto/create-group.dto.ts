@@ -1,6 +1,14 @@
-import { IsString, IsNotEmpty, IsArray } from 'class-validator';
+import { IsString, IsNotEmpty, IsArray, IsEnum } from 'class-validator';
 
 export type Permission = 'READ' | 'WRITE' | 'DELETE' | 'SHARE' | 'UPLOAD_FILES';
+
+enum GroupPermission {
+  READ = 'READ',
+  WRITE = 'WRITE',
+  DELETE = 'DELETE',
+  SHARE = 'SHARE',
+  UPLOAD_FILES = 'UPLOAD_FILES',
+}
 
 export class CreateGroupDto {
   @IsString()
@@ -8,5 +16,6 @@ export class CreateGroupDto {
   name: string;
 
   @IsArray()
+  @IsEnum(GroupPermission, { each: true })
   permissions: Permission[];
 }

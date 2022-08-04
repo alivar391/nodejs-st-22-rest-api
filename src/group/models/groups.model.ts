@@ -23,7 +23,7 @@ export class Group extends Model<Group, GroupCreationsAttrs> {
   name: string;
 
   @Column({
-    type: DataType.ARRAY,
+    type: DataType.ARRAY(DataType.STRING),
     allowNull: false,
   })
   permissions: Permission[];

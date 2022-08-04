@@ -36,8 +36,9 @@ export class GroupService {
     }
     const newGroup = await this.groupModel.update(updateGroupDto, {
       where: { id },
+      returning: true,
     });
-    return newGroup;
+    return newGroup[1][0];
   }
 
   async remove(id: string) {
