@@ -9,6 +9,7 @@ import {
   HttpStatus,
   Put,
   NotFoundException,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { GroupService } from '../services/group.service';
 import { CreateGroupDto } from '../dto/create-group.dto';
@@ -32,18 +33,18 @@ export class GroupController {
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  async findOne(@Param('id') id: string) {
+  async findOne(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
     const group = await this.groupService.findOne(id);
     if (!group) {
       throw new NotFoundException('Group is not found');
     }
-    return;
+    return group;
   }
 
   @Put(':id')
   @HttpCode(HttpStatus.OK)
   async update(
-    @Param('id') id: string,
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
     @Body() updateGroupDto: UpdateGroupDto,
   ) {
     const group = await this.groupService.update(id, updateGroupDto);
@@ -56,7 +57,7 @@ export class GroupController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async remove(@Param('id') id: string) {
+  async remove(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
     const group = await this.groupService.remove(id);
     if (!group) {
       throw new NotFoundException('Group is not found');
