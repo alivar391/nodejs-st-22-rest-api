@@ -1,13 +1,13 @@
 import { Model, Table, Column, DataType } from 'sequelize-typescript';
+import { Permission } from '../dto/create-group.dto';
 
-interface UserCreationsAttrs {
-  login: string;
-  password: string;
-  age: number;
+interface GroupCreationsAttrs {
+  name: string;
+  permissions: Permission[];
 }
 
-@Table({ tableName: 'Users', timestamps: false })
-export class User extends Model<User, UserCreationsAttrs> {
+@Table({ tableName: 'Groups', timestamps: false })
+export class Group extends Model<Group, GroupCreationsAttrs> {
   @Column({
     type: DataType.UUID,
     defaultValue: DataType.UUIDV4(),
@@ -18,26 +18,13 @@ export class User extends Model<User, UserCreationsAttrs> {
 
   @Column({
     type: DataType.STRING,
-    unique: true,
     allowNull: false,
   })
-  login: string;
+  name: string;
 
   @Column({
-    type: DataType.STRING,
+    type: DataType.ARRAY,
     allowNull: false,
   })
-  password: string;
-
-  @Column({
-    type: DataType.INTEGER,
-    allowNull: false,
-  })
-  age: number;
-
-  @Column({
-    type: DataType.BOOLEAN,
-    defaultValue: false,
-  })
-  isDeleted: boolean;
+  permissions: Permission[];
 }

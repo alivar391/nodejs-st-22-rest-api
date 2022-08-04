@@ -1,26 +1,50 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/sequelize';
 import { CreateGroupDto } from '../dto/create-group.dto';
 import { UpdateGroupDto } from '../dto/update-group.dto';
+import { Group } from '../models/groups.model';
 
 @Injectable()
 export class GroupService {
-  create(createGroupDto: CreateGroupDto) {
-    return 'This action adds a new group';
+  constructor(
+    @InjectModel(Group)
+    private groupModel: typeof Group,
+  ) {}
+
+  async create(createGroupDto: CreateGroupDto): Promise<Group> {
+    const group = await this.groupModel.create(createGroupDto);
+    return group;
   }
 
-  findAll() {
-    return `This action returns all group`;
+  async findAll() {
+    const groups = await this.groupModel.findAll();
+    return groups;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} group`;
+  async findOne(id: string) {
+    const group = await this.groupModel.findByPk(id);
+    if (!group) {
+      return;
+    }
+    return group;
   }
 
-  update(id: number, updateGroupDto: UpdateGroupDto) {
-    return `This action updates a #${id} group`;
+  async update(id: string, updateGroupDto: UpdateGroupDto) {
+    const group = await this.groupModel.findByPk(id);
+    if (!group) {
+      return;
+    }
+    const newGroup = await this.groupModel.update(updateGroupDto, {
+      where: { id },
+    });
+    return newGroup;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} group`;
+  async remove(id: string) {
+    const group = await this.groupModel.findByPk(id);
+    if (!group) {
+      return;
+    }
+    return await this.groupModel.destroy({ where: { id } });
   }
 }
