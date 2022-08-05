@@ -26,6 +26,7 @@ export class UserService {
 
   async findAll(loginSubstring: string, limit: number) {
     const allUsers = await this.userModel.findAll({
+      include: { all: true },
       where: { login: { [Op.substring]: loginSubstring }, isDeleted: false },
       order: [['login', 'ASC']],
       limit: limit,
@@ -34,7 +35,7 @@ export class UserService {
   }
 
   async findOne(id: string) {
-    const user = await this.userModel.findByPk(id);
+    const user = await this.userModel.findByPk(id, { include: { all: true } });
     if (!user || user.isDeleted) {
       return;
     }
