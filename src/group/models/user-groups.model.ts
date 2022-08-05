@@ -3,11 +3,9 @@ import {
   Table,
   Column,
   DataType,
-  BelongsToMany,
   ForeignKey,
 } from 'sequelize-typescript';
 import { User } from 'src/users/models/users.model';
-import { Permission } from '../dto/create-group.dto';
 import { Group } from './groups.model';
 
 @Table({ tableName: 'UserGroup', timestamps: false })
