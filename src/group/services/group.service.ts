@@ -17,12 +17,14 @@ export class GroupService {
   }
 
   async findAll(): Promise<Group[]> {
-    const groups = await this.groupModel.findAll();
+    const groups = await this.groupModel.findAll({ include: { all: true } });
     return groups;
   }
 
   async findOne(id: string): Promise<Group> | undefined {
-    const group = await this.groupModel.findByPk(id);
+    const group = await this.groupModel.findByPk(id, {
+      include: { all: true },
+    });
     if (!group) {
       return;
     }

@@ -1,4 +1,12 @@
-import { Model, Table, Column, DataType } from 'sequelize-typescript';
+import {
+  Model,
+  Table,
+  Column,
+  DataType,
+  BelongsToMany,
+} from 'sequelize-typescript';
+import { Group } from 'src/group/models/groups.model';
+import { UserGroup } from 'src/group/models/user-groups.model';
 
 interface UserCreationsAttrs {
   login: string;
@@ -40,4 +48,7 @@ export class User extends Model<User, UserCreationsAttrs> {
     defaultValue: false,
   })
   isDeleted: boolean;
+
+  @BelongsToMany(() => Group, () => UserGroup)
+  groups: Group[];
 }
