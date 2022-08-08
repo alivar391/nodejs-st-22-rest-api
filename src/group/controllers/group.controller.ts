@@ -14,6 +14,7 @@ import {
 import { GroupService } from '../services/group.service';
 import { CreateGroupDto } from '../dto/create-group.dto';
 import { UpdateGroupDto } from '../dto/update-group.dto';
+import { AddUsersToGroupDto } from '../dto/user-group.dto';
 
 @Controller('groups')
 export class GroupController {
@@ -23,6 +24,21 @@ export class GroupController {
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() createGroupDto: CreateGroupDto) {
     return await this.groupService.create(createGroupDto);
+  }
+
+  @Post(':id')
+  async addUsersToGroup(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+    @Body() addUsersToGroupDto: AddUsersToGroupDto,
+  ) {
+    const group = await this.groupService.addUsersToGroup(
+      id,
+      addUsersToGroupDto,
+    );
+    if (!group) {
+      throw new NotFoundException('Group is not found');
+    }
+    return group;
   }
 
   @Get()
