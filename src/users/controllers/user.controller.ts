@@ -12,6 +12,7 @@ import {
   BadRequestException,
   NotFoundException,
   InternalServerErrorException,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { UserService } from '../services/user.service';
 import { CreateUserDto } from '../dto/create-user.dto';
@@ -44,7 +45,7 @@ export class UserController {
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  async findOne(@Param('id') id: string) {
+  async findOne(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
     const user = await this.userService.findOne(id);
     if (!user) {
       throw new NotFoundException('User is not found');
@@ -54,7 +55,10 @@ export class UserController {
 
   @Put(':id')
   @HttpCode(HttpStatus.OK)
-  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  async update(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
     try {
       const user = await this.userService.update(id, updateUserDto);
       return user;
@@ -73,7 +77,7 @@ export class UserController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async remove(@Param('id') id: string) {
+  async remove(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
     const user = await this.userService.remove(id);
     if (!user) {
       throw new NotFoundException('User is not found');
