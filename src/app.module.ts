@@ -7,6 +7,8 @@ import { GroupModule } from './group/group.module';
 import { Group } from './group/models/groups.model';
 import { UserGroup } from './group/models/user-groups.model';
 import { LoggerMiddleware } from './logger/logger.middleware';
+import { APP_FILTER } from '@nestjs/core';
+import { AllExceptionsFilter } from './exception-filter/all-exception.filter';
 
 @Module({
   imports: [
@@ -26,6 +28,12 @@ import { LoggerMiddleware } from './logger/logger.middleware';
       retryAttempts: 2,
     }),
     GroupModule,
+  ],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionsFilter,
+    },
   ],
 })
 export class AppModule implements NestModule {

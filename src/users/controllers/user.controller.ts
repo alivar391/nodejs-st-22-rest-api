@@ -40,6 +40,7 @@ export class UserController {
     @Query('loginSubstring') loginSubstring: string,
     @Query('limit') limit: number,
   ) {
+    throw new Error('sdfswdgf');
     return await this.userService.findAll(loginSubstring || '', limit || 10);
   }
 
