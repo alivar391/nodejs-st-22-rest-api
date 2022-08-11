@@ -19,7 +19,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const errorMessage =
       exception instanceof HttpException
         ? exception.message
-        : 'Internal server error';
+        : 'Internal Server Error';
     const responseBody = {
       statusCode: httpStatus,
       timestamp: new Date().toISOString(),

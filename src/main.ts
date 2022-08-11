@@ -1,8 +1,7 @@
-import { HttpAdapterHost, NestFactory } from '@nestjs/core';
+import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
 import 'dotenv/config';
-import { AllExceptionsFilter } from './exception-filter/all-exception.filter';
 
 const PORT = process.env.PORT || 3000;
 async function bootstrap() {
