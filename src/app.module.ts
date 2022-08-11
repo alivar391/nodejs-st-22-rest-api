@@ -6,9 +6,7 @@ import { User } from './users/models/users.model';
 import { GroupModule } from './group/group.module';
 import { Group } from './group/models/groups.model';
 import { UserGroup } from './group/models/user-groups.model';
-import { GroupController } from './group/controllers/group.controller';
 import { LoggerMiddleware } from './logger/logger.middleware';
-import { UserController } from './users/controllers/user.controller';
 
 @Module({
   imports: [
