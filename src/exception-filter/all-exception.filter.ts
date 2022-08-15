@@ -31,17 +31,17 @@ export class AllExceptionsFilter implements ExceptionFilter {
     };
     httpAdapter.reply(ctx.getResponse(), responseBody, httpStatus);
     if (!(exception instanceof HttpException)) {
-      // logger.error(responseBody);
+      logger.error(responseBody);
       throw exception;
     } else {
-      // logger.error({
-      //   controller_method: `[${req.url} ${req.method}]`,
-      //   arguments: {
-      //     req,
-      //     res,
-      //   },
-      //   errorMessage,
-      // });
+      logger.error({
+        controller_method: `[${req.url} ${req.method}]`,
+        arguments: {
+          req,
+          res,
+        },
+        errorMessage,
+      });
     }
   }
 }
