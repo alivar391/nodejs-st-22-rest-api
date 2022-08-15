@@ -14,10 +14,12 @@ import {
   InternalServerErrorException,
   ParseUUIDPipe,
   SetMetadata,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from '../services/user.service';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
+import { JwtGuard } from 'src/auth/guard/jwt.guard';
 
 @Controller('users')
 export class UserController {
@@ -36,6 +38,7 @@ export class UserController {
   }
 
   @Get()
+  @UseGuards(JwtGuard)
   @HttpCode(HttpStatus.OK)
   @SetMetadata('controller-name', 'UserController.getAutoSuggestUsers')
   async getAutoSuggestUsers(
@@ -46,6 +49,7 @@ export class UserController {
   }
 
   @Get(':id')
+  @UseGuards(JwtGuard)
   @HttpCode(HttpStatus.OK)
   async findOne(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
     const user = await this.userService.findOne(id);
@@ -56,6 +60,7 @@ export class UserController {
   }
 
   @Put(':id')
+  @UseGuards(JwtGuard)
   @HttpCode(HttpStatus.OK)
   async update(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
@@ -78,6 +83,7 @@ export class UserController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
     const user = await this.userService.remove(id);
