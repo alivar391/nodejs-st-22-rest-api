@@ -11,8 +11,18 @@ async function bootstrap() {
     defaultVersion: '1',
   });
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
+
   await app.listen(PORT, () => {
     console.log(`Server is running on port = ${PORT}`);
+  });
+
+  process.on('uncaughtException', (error, origin) => {
+    console.error(`captured error: ${error.message}`);
+    process.exit(1);
+  });
+
+  process.on('unhandledRejection', (reason: any, promise) => {
+    console.error(`Unhandled rejection detected: ${reason}`);
   });
 }
 bootstrap();
