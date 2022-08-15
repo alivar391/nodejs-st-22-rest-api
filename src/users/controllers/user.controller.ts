@@ -13,6 +13,7 @@ import {
   NotFoundException,
   InternalServerErrorException,
   ParseUUIDPipe,
+  SetMetadata,
 } from '@nestjs/common';
 import { UserService } from '../services/user.service';
 import { CreateUserDto } from '../dto/create-user.dto';
@@ -36,6 +37,7 @@ export class UserController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
+  @SetMetadata('controller-name', 'UserController.getAutoSuggestUsers')
   async getAutoSuggestUsers(
     @Query('loginSubstring') loginSubstring: string,
     @Query('limit') limit: number,
