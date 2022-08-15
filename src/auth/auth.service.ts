@@ -28,7 +28,7 @@ export class AuthService {
     return { accessToken };
   }
 
-  async signToken(
+  private async signToken(
     userId: string,
     login: string,
   ): Promise<{
