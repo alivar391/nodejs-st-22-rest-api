@@ -9,6 +9,7 @@ import { UserGroup } from './group/models/user-groups.model';
 import { LoggerMiddleware } from './logger/logger.middleware';
 import { APP_FILTER } from '@nestjs/core';
 import { AllExceptionsFilter } from './exception-filter/all-exception.filter';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { AllExceptionsFilter } from './exception-filter/all-exception.filter';
       retryAttempts: 2,
     }),
     GroupModule,
+    AuthModule,
   ],
   providers: [
     {
