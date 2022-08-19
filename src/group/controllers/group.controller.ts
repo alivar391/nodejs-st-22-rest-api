@@ -10,13 +10,16 @@ import {
   Put,
   NotFoundException,
   ParseUUIDPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { GroupService } from '../services/group.service';
 import { CreateGroupDto } from '../dto/create-group.dto';
 import { UpdateGroupDto } from '../dto/update-group.dto';
 import { AddUsersToGroupDto } from '../dto/user-group.dto';
+import { JwtGuard } from 'src/auth/guard/jwt.guard';
 
 @Controller('groups')
+@UseGuards(JwtGuard)
 export class GroupController {
   constructor(private readonly groupService: GroupService) {}
 

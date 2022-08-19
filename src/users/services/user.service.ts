@@ -5,6 +5,7 @@ import { User } from '../models/users.model';
 import { InjectModel } from '@nestjs/sequelize';
 import { UserEntity } from '../entities/user.entity';
 import { Op } from 'sequelize';
+import * as argon from 'argon2';
 
 @Injectable()
 export class UserService {
@@ -20,6 +21,8 @@ export class UserService {
     if (userExist) {
       return;
     }
+    const hashPassword = await argon.hash(createUserDto.password);
+    createUserDto.password = hashPassword;
     const res = await this.userModel.create(createUserDto);
     return res;
   }
