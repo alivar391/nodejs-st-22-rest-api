@@ -5,7 +5,7 @@ import {
   DataType,
   ForeignKey,
 } from 'sequelize-typescript';
-import { User } from 'src/users/models/users.model';
+import { User } from '../../users/models/users.model';
 import { Group } from './groups.model';
 
 @Table({ tableName: 'UserGroup', timestamps: false })
