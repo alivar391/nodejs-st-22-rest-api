@@ -68,7 +68,6 @@ export class GroupController {
   ) {
     const group = await this.groupService.update(id, updateGroupDto);
     if (!group) {
-      console.log('no');
       throw new NotFoundException('Group is not found');
     }
     return group;
