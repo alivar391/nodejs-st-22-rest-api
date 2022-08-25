@@ -164,9 +164,7 @@ describe('UserController', () => {
   it('delete method should return 404 statusCode if user not found', async () => {
     try {
       const result = await controller.update(wrongUserId, updateUserDto);
-      console.log(result);
     } catch (err) {
-      console.log('err', err.response);
       expect(err.response.statusCode).toBe(404);
       expect(err.response.message).toBe('User is not found');
       expect(err).toBeInstanceOf(NotFoundException);
