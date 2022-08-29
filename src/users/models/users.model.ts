@@ -5,8 +5,8 @@ import {
   DataType,
   BelongsToMany,
 } from 'sequelize-typescript';
-import { Group } from 'src/group/models/groups.model';
-import { UserGroup } from 'src/group/models/user-groups.model';
+import { Group } from '../../group/models/groups.model';
+import { UserGroup } from '../../group/models/user-groups.model';
 
 interface UserCreationsAttrs {
   login: string;

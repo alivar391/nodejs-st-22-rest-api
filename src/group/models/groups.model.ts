@@ -5,7 +5,7 @@ import {
   DataType,
   BelongsToMany,
 } from 'sequelize-typescript';
-import { User } from 'src/users/models/users.model';
+import { User } from '../../users/models/users.model';
 import { Permission } from '../dto/create-group.dto';
 import { UserGroup } from './user-groups.model';
 

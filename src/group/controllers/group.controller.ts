@@ -16,7 +16,7 @@ import { GroupService } from '../services/group.service';
 import { CreateGroupDto } from '../dto/create-group.dto';
 import { UpdateGroupDto } from '../dto/update-group.dto';
 import { AddUsersToGroupDto } from '../dto/user-group.dto';
-import { JwtGuard } from 'src/auth/guard/jwt.guard';
+import { JwtGuard } from '../../auth/guard/jwt.guard';
 
 @Controller('groups')
 @UseGuards(JwtGuard)
@@ -68,7 +68,6 @@ export class GroupController {
   ) {
     const group = await this.groupService.update(id, updateGroupDto);
     if (!group) {
-      console.log('no');
       throw new NotFoundException('Group is not found');
     }
     return group;
